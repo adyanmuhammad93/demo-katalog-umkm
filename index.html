@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Katalog Produk UMKM Modern</title>
+    <meta name="description" content="Template website statis katalog produk UMKM modern dengan data terpisah dalam format YAML dan pemesanan otomatis via WhatsApp." />
+    <meta property="og:title" content="Katalog Produk UMKM Modern" />
+    <meta property="og:description" content="Katalog produk pilihan UMKM lokal berkualitas tinggi dengan kemudahan pemesanan via WhatsApp." />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#ecfdf5',
+                100: '#d1fae5',
+                500: '#10b981',
+                600: '#059669',
+                700: '#047857',
+                800: '#065f46',
+                900: '#064e3b',
+              },
+              accent: {
+                50: '#fffbeb',
+                100: '#fef3c7',
+                500: '#f59e0b',
+                600: '#d97706',
+                700: '#b45309',
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- JS-YAML CDN for Async YAML Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
+    <style>
+      html, body {
+        overflow-x: hidden;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      /* Custom scrollbar for horizontal category filter */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+
+  <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+    
+    <!-- Top Announcement Bar -->
+    <div id="announcement-bar" class="bg-brand-800 text-white text-[11px] sm:text-xs md:text-sm py-1.5 sm:py-2 px-3 sm:px-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center gap-2">
+        <p class="flex items-center gap-1.5 sm:gap-2 min-w-0 text-left">
+          <i class="fa-solid fa-store text-emerald-300 text-xs flex-shrink-0"></i>
+          <span id="announcement-text" class="truncate font-medium">Selamat datang di Katalog Resmi UMKM</span>
+        </p>
+        <div class="hidden sm:flex items-center gap-4 text-emerald-100 flex-shrink-0">
+          <a id="top-ig-link" href="#" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center gap-1.5">
+            <i class="fa-brands fa-instagram"></i>
+            <span id="top-ig-text">@umkm.nusantara</span>
+          </a>
+          <span class="text-emerald-500">|</span>
+          <span class="flex items-center gap-1">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+            100% Produk Asli
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header id="main-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm transition">
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+        
+        <!-- Logo & Brand Info -->
+        <a href="#hero-section" id="navbar-brand-link" class="flex items-center gap-2.5 sm:gap-3 group min-w-0 flex-1 mr-2">
+          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 text-white flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition flex-shrink-0">
+            <i class="fa-solid fa-bag-shopping text-base sm:text-xl"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <h1 id="navbar-logo" class="font-extrabold text-sm sm:text-lg lg:text-xl text-slate-900 tracking-tight leading-tight truncate">
+              Katalog UMKM
+            </h1>
+            <p id="navbar-slogan" class="text-[11px] sm:text-xs text-slate-500 font-medium truncate leading-tight mt-0.5">
+              Karya Kreatif Nusantara
+            </p>
+          </div>
+        </a>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
+          <a href="#katalog-section" class="hidden md:inline-flex items-center text-sm font-semibold text-slate-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-slate-100 transition">
+            <i class="fa-solid fa-layer-group mr-2 text-brand-600"></i> Katalog
+          </a>
+          <a href="#keunggulan-section" class="hidden md:inline-flex items-center text-sm font-semibold text-slate-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-slate-100 transition">
+            <i class="fa-solid fa-circle-check mr-2 text-brand-600"></i> Keunggulan
+          </a>
+          <a href="#kontak-section" class="hidden md:inline-flex items-center text-sm font-semibold text-slate-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-slate-100 transition">
+            <i class="fa-solid fa-location-dot mr-2 text-brand-600"></i> Lokasi
+          </a>
+
+          <!-- Direct WA Hubungi Kami -->
+          <a id="navbar-wa-cta" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs sm:text-sm font-bold py-2 sm:py-2.5 px-3 sm:px-5 rounded-full shadow-sm shadow-emerald-600/30 transition transform hover:-translate-y-0.5 whitespace-nowrap">
+            <i class="fa-brands fa-whatsapp text-sm sm:text-base text-emerald-100"></i>
+            <span class="hidden sm:inline">Tanya Admin</span>
+            <span class="sm:hidden">Chat WA</span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <main class="flex-grow">
+      <!-- Loading Skeleton / Placeholder -->
+      <div id="loading-state" class="py-20 px-4 text-center">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent mb-4"></div>
+        <p class="text-slate-600 font-medium">Memuat data katalog dari <code class="text-brand-700 font-semibold">data.yaml</code>...</p>
+      </div>
+
+      <!-- Main Content Container (Hidden until loaded) -->
+      <div id="content-container" class="hidden">
+        
+        <!-- Hero Section -->
+        <section id="hero-section" class="relative overflow-hidden bg-slate-900 text-white">
+          <div class="absolute inset-0 z-0">
+            <img id="hero-banner-img" src="" alt="Banner Toko" class="w-full h-full object-cover opacity-35 filter brightness-90 transform scale-105 transition duration-1000" />
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-transparent"></div>
+          </div>
+
+          <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-24 lg:py-28">
+            <div class="max-w-2xl">
+              <span id="hero-badge" class="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-brand-500/20 text-emerald-300 border border-brand-400/30 text-xs font-semibold uppercase tracking-wider mb-4">
+                <i class="fa-solid fa-certificate text-emerald-400"></i> Produk Asli UMKM
+              </span>
+              
+              <h2 id="hero-title" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4 sm:mb-6">
+                <!-- Injected via YAML -->
+              </h2>
+              
+              <p id="hero-subtitle" class="text-base sm:text-lg text-slate-300 mb-8 leading-relaxed">
+                <!-- Injected via YAML -->
+              </p>
+
+              <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+                <a id="hero-cta-btn" href="#katalog-section" class="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 text-sm sm:text-base font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5">
+                  <i class="fa-solid fa-basket-shopping"></i>
+                  <span id="hero-cta-text">Lihat Produk</span>
+                </a>
+                <a id="hero-wa-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-white text-sm sm:text-base font-semibold px-5 py-3.5 rounded-xl transition">
+                  <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i>
+                  <span>Konsultasi Pemesanan</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Keunggulan Section (3 Points from YAML) -->
+        <section id="keunggulan-section" class="bg-white border-b border-slate-200 py-10 sm:py-14">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="keunggulan-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              <!-- Dynamically populated from YAML -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Catalog / Produk Section -->
+        <section id="katalog-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          
+          <!-- Catalog Header & Search -->
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+            <div>
+              <div class="flex items-center gap-2 text-brand-600 text-xs sm:text-sm font-bold tracking-wider uppercase mb-1">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                Katalog Produk Terkurasi
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Pilihan Terbaik Untuk Anda
+              </h2>
+              <p class="text-slate-500 text-xs sm:text-sm mt-1">
+                Klik tombol "Beli via WA" untuk langsung memesan ke admin toko secara praktis.
+              </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="w-full md:w-80">
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="product-search-input" 
+                  placeholder="Cari nama produk..." 
+                  class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm placeholder-slate-400 shadow-sm transition"
+                />
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <button 
+                  id="search-clear-btn" 
+                  class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs p-1"
+                  title="Hapus pencarian"
+                >
+                  <i class="fa-solid fa-circle-xmark text-sm"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Filter Pills (Horizontal scroll on mobile) -->
+          <div class="mb-8">
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 pt-1" id="kategori-container">
+              <!-- Dynamically populated buttons -->
+            </div>
+          </div>
+
+          <!-- Product Statistics / Counter -->
+          <div class="flex items-center justify-between text-xs sm:text-sm text-slate-500 mb-6 px-1">
+            <span id="product-count-badge">Menampilkan 0 produk</span>
+            <span class="text-emerald-700 font-medium flex items-center gap-1">
+              <i class="fa-solid fa-bolt text-amber-500"></i> Fast Response via WhatsApp
+            </span>
+          </div>
+
+          <!-- Products Grid (2 cols mobile, 4 cols desktop) -->
+          <div id="produk-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
+            <!-- Dynamically populated from YAML -->
+          </div>
+
+          <!-- Empty State (When search/filter produces 0 results) -->
+          <div id="empty-state" class="hidden text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-slate-300">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl">
+              <i class="fa-solid fa-box-open"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Produk Tidak Ditemukan</h3>
+            <p class="text-sm text-slate-500 max-w-md mx-auto mb-6">
+              Maaf, tidak ada produk yang cocok dengan kriteria pencarian atau kategori yang dipilih.
+            </p>
+            <button id="reset-filter-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition">
+              <i class="fa-solid fa-rotate-left"></i> Reset Filter
+            </button>
+          </div>
+
+        </section>
+
+        <!-- Informasi Toko & Kontak Section -->
+        <section id="kontak-section" class="bg-gradient-to-b from-slate-100 to-slate-200 border-t border-slate-200 py-12 sm:py-16">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="grid grid-cols-1 lg:grid-cols-12">
+                
+                <!-- Left: Store Profile -->
+                <div class="p-6 sm:p-10 lg:col-span-7 flex flex-col justify-between">
+                  <div>
+                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-brand-100 text-brand-800 text-xs font-bold uppercase tracking-wider mb-4">
+                      <i class="fa-solid fa-building-user"></i> Profil UMKM
+                    </span>
+                    <h3 id="info-nama-toko" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+                      <!-- Toko Name -->
+                    </h3>
+                    <p id="info-deskripsi-toko" class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                      <!-- Toko Description -->
+                    </p>
+                  </div>
+
+                  <!-- Quick Contact Details -->
+                  <div class="space-y-4 pt-4 border-t border-slate-100">
+                    <div class="flex items-start gap-3.5">
+                      <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center flex-shrink-0 text-base">
+                        <i class="fa-solid fa-location-dot"></i>
+                      </div>
+                      <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Alamat Toko</p>
+                        <p id="info-alamat" class="text-sm font-medium text-slate-800 mt-0.5 leading-snug">
+                          <!-- Alamat -->
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-start gap-3.5">
+                      <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center flex-shrink-0 text-base">
+                        <i class="fa-brands fa-instagram"></i>
+                      </div>
+                      <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Instagram Resmi</p>
+                        <a id="info-instagram" href="#" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-pink-600 hover:text-pink-700 hover:underline mt-0.5 inline-block">
+                          <!-- IG username -->
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right: WhatsApp Fast Order Card -->
+                <div class="p-6 sm:p-10 lg:col-span-5 bg-gradient-to-br from-brand-700 via-brand-800 to-slate-900 text-white flex flex-col justify-between">
+                  <div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300 text-2xl mb-4">
+                      <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h4 class="text-xl sm:text-2xl font-bold tracking-tight mb-2">
+                      Pusat Pelayanan & Pesanan
+                    </h4>
+                    <p class="text-sm text-emerald-100/90 leading-relaxed mb-6">
+                      Punya pertanyaan khusus, permintaan custom order, atau pembelian dalam jumlah grosir? Hubungi nomor WhatsApp resmi kami langsung.
+                    </p>
+                    <div class="bg-black/25 rounded-2xl p-4 border border-white/10 mb-6">
+                      <p class="text-xs text-emerald-300 font-medium">Nomor WhatsApp Resmi:</p>
+                      <p id="info-wa-number" class="text-lg sm:text-xl font-extrabold tracking-wider text-white mt-1">
+                        <!-- WA number -->
+                      </p>
+                    </div>
+                  </div>
+
+                  <a id="info-wa-link" href="#" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2.5 bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5 text-center">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>Chat WhatsApp Sekarang</span>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="main-footer" class="bg-slate-900 text-slate-400 text-xs sm:text-sm border-t border-slate-800 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-center sm:text-left">
+          <p id="footer-copyright" class="font-medium text-slate-300">
+            <!-- hak_cipta -->
+          </p>
+          <p id="footer-info-ringkas" class="text-xs text-slate-500 mt-1 max-w-xl">
+            <!-- info ringkas -->
+          </p>
+        </div>
+        <div class="flex items-center gap-4 text-sm">
+          <a href="#hero-section" class="hover:text-emerald-400 transition flex items-center gap-1">
+            <i class="fa-solid fa-arrow-up"></i> Ke Atas
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button (Sticky Bottom Right for Mobile & Desktop) -->
+    <aside aria-label="WhatsApp floating contact">
+      <a 
+        id="floating-wa-btn" 
+        href="#" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 sm:px-5 rounded-full shadow-2xl shadow-emerald-700/50 transition-all duration-300 transform hover:scale-105 active:scale-95 group"
+        title="Hubungi Admin via WhatsApp"
+      >
+        <i class="fa-brands fa-whatsapp text-2xl sm:text-3xl text-white animate-bounce"></i>
+        <span class="text-xs sm:text-sm font-bold tracking-wide pr-1">Beli via WA</span>
+      </a>
+    </aside>
+
+    <!-- Product Detail Modal (Pop-up) -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div class="relative bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 transform transition-all">
+        <!-- Close button -->
+        <button id="modal-close-btn" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+
+        <div class="relative h-64 sm:h-72 bg-slate-100 overflow-hidden">
+          <img id="modal-img" src="" alt="Detail Produk" class="w-full h-full object-cover" />
+          <span id="modal-stock-badge" class="absolute bottom-3 left-3 text-xs font-extrabold px-3 py-1 rounded-full shadow-md">
+            Ready
+          </span>
+          <span id="modal-category-badge" class="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full bg-slate-900/70 backdrop-blur text-white shadow-md">
+            Kategori
+          </span>
+        </div>
+
+        <div class="p-6">
+          <h3 id="modal-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2">
+            Nama Produk
+          </h3>
+          
+          <div class="flex items-baseline gap-3 mb-4">
+            <span id="modal-discount-price" class="text-2xl font-black text-brand-700">Rp 0</span>
+            <span id="modal-original-price" class="text-sm font-semibold text-slate-400 line-through">Rp 0</span>
+            <span id="modal-save-badge" class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md">Hemat</span>
+          </div>
+
+          <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed mb-6">
+            Deskripsi lengkap produk...
+          </p>
+
+          <a id="modal-wa-btn" href="#" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2.5 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-extrabold py-3.5 px-6 rounded-xl shadow-lg shadow-amber-500/25 transition transform hover:-translate-y-0.5 text-base">
+            <i class="fa-brands fa-whatsapp text-xl text-emerald-950"></i>
+            <span>Pesan Sekarang via WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vanilla JavaScript: Async YAML Fetch, Parse, and Render Engine -->
+    <script>
+      (function() {
+        // Global State
+        let storeData = null;
+        let activeCategory = "Semua";
+        let searchQuery = "";
+
+        // Format Currency Helper (Indonesian Rupiah)
+        function formatRupiah(number) {
+          if (!number && number !== 0) return "Rp 0";
+          return "Rp " + Number(number).toLocaleString("id-ID");
+        }
+
+        // Generate WhatsApp Direct Order Link
+        function buildWhatsAppLink(phoneNumber, productName, productPrice, storeName) {
+          // Normalize phone number (ensure country code without + or leading zeros)
+          let cleanPhone = String(phoneNumber || "").replace(/[^0-9]/g, "");
+          if (cleanPhone.startsWith("0")) {
+            cleanPhone = "62" + cleanPhone.slice(1);
+          }
+          if (!cleanPhone) cleanPhone = "6281234567890";
+
+          const formattedPrice = formatRupiah(productPrice);
+          const message = `Halo Admin ${storeName || "Katalog UMKM"}, saya mau pesan produk ini:\n\n` +
+                          `• Produk: ${productName}\n` +
+                          `• Harga: ${formattedPrice}\n\n` +
+                          `Apakah stok masih tersedia dan bisa dikirim ke alamat saya? Terima kasih!`;
+
+          return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+        }
+
+        // Generate General WhatsApp Inquiry Link
+        function buildGeneralWaLink(phoneNumber, storeName) {
+          let cleanPhone = String(phoneNumber || "").replace(/[^0-9]/g, "");
+          if (cleanPhone.startsWith("0")) {
+            cleanPhone = "62" + cleanPhone.slice(1);
+          }
+          if (!cleanPhone) cleanPhone = "6281234567890";
+
+          const message = `Halo Admin ${storeName || "Katalog UMKM"}, saya ingin bertanya mengenai katalog produk yang tersedia. Mohon informasinya.`;
+          return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+        }
+
+        // Render Navbar & Toko Info
+        function renderTokoInfo(toko, kontak) {
+          const storeName = toko?.nama_toko || "Katalog UMKM";
+          const slogan = toko?.slogan || "Karya Kreatif Nusantara";
+          const logoText = toko?.logo_text || "UMKM";
+
+          document.title = `${storeName} - ${slogan}`;
+          
+          const navLogo = document.getElementById("navbar-logo");
+          if (navLogo) navLogo.textContent = logoText;
+
+          const navSlogan = document.getElementById("navbar-slogan");
+          if (navSlogan) navSlogan.textContent = slogan;
+
+          const annText = document.getElementById("announcement-text");
+          if (annText) {
+            annText.innerHTML = `<span class="hidden sm:inline">Selamat datang di Katalog Resmi ${storeName} • ${slogan}</span><span class="sm:hidden">Katalog Resmi <strong>${storeName}</strong></span>`;
+          }
+
+          // Social & Top Links
+          if (kontak?.instagram_username) {
+            const igHandle = kontak.instagram_username.startsWith("@") ? kontak.instagram_username : "@" + kontak.instagram_username;
+            const igClean = igHandle.replace("@", "");
+            const topIg = document.getElementById("top-ig-text");
+            const topIgLink = document.getElementById("top-ig-link");
+            const infoIg = document.getElementById("info-instagram");
+            
+            if (topIg) topIg.textContent = igHandle;
+            if (topIgLink) topIgLink.href = `https://instagram.com/${igClean}`;
+            if (infoIg) {
+              infoIg.textContent = igHandle;
+              infoIg.href = `https://instagram.com/${igClean}`;
+            }
+          }
+
+          // General WA links
+          const generalWaUrl = buildGeneralWaLink(kontak?.whatsapp_number, storeName);
+          const navWa = document.getElementById("navbar-wa-cta");
+          const heroWa = document.getElementById("hero-wa-btn");
+          const infoWaLink = document.getElementById("info-wa-link");
+          const floatingWa = document.getElementById("floating-wa-btn");
+
+          if (navWa) navWa.href = generalWaUrl;
+          if (heroWa) heroWa.href = generalWaUrl;
+          if (infoWaLink) infoWaLink.href = generalWaUrl;
+          if (floatingWa) floatingWa.href = generalWaUrl;
+
+          // Info Toko Section
+          const infoNama = document.getElementById("info-nama-toko");
+          if (infoNama) infoNama.textContent = storeName;
+
+          const infoDesc = document.getElementById("info-deskripsi-toko");
+          if (infoDesc) infoDesc.textContent = toko?.deskripsi_toko || "";
+
+          const infoAlamat = document.getElementById("info-alamat");
+          if (infoAlamat) infoAlamat.textContent = kontak?.alamat || "Indonesia";
+
+          const infoWaNum = document.getElementById("info-wa-number");
+          if (infoWaNum) infoWaNum.textContent = kontak?.whatsapp_number || "-";
+        }
+
+        // Render Hero Section
+        function renderHero(hero) {
+          if (!hero) return;
+          const heroTitle = document.getElementById("hero-title");
+          const heroSubtitle = document.getElementById("hero-subtitle");
+          const heroImg = document.getElementById("hero-banner-img");
+          const heroCtaText = document.getElementById("hero-cta-text");
+
+          if (heroTitle && hero.title) heroTitle.textContent = hero.title;
+          if (heroSubtitle && hero.sub_title) heroSubtitle.textContent = hero.sub_title;
+          if (heroImg) {
+            const bannerSrc = hero.banner_image || hero.banner || hero.foto_banner || "images/banner.jpg";
+            heroImg.src = bannerSrc;
+            heroImg.onerror = function() {
+              this.onerror = null;
+              this.src = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80";
+            };
+          }
+          if (heroCtaText && hero.cta_text) heroCtaText.textContent = hero.cta_text;
+        }
+
+        // Render Keunggulan Section (3 Points)
+        function renderKeunggulan(keunggulanList) {
+          const container = document.getElementById("keunggulan-grid");
+          if (!container || !Array.isArray(keunggulanList)) return;
+
+          container.innerHTML = "";
+          keunggulanList.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-200 hover:bg-emerald-50/40 transition duration-200 group";
+
+            const iconClass = item.ikon || "fa-solid fa-check";
+
+            card.innerHTML = `
+              <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center flex-shrink-0 text-xl group-hover:bg-brand-600 group-hover:text-white transition">
+                <i class="${iconClass}"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-base mb-1">${item.judul || ""}</h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${item.deskripsi || ""}</p>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        // Render Category Tabs
+        function renderCategories(categories) {
+          const container = document.getElementById("kategori-container");
+          if (!container) return;
+
+          // Always ensure "Semua" is included
+          let cats = Array.isArray(categories) ? [...categories] : ["Semua"];
+          if (!cats.includes("Semua")) {
+            cats.unshift("Semua");
+          }
+
+          container.innerHTML = "";
+
+          cats.forEach((cat) => {
+            const btn = document.createElement("button");
+            const isActive = cat === activeCategory;
+            
+            btn.type = "button";
+            btn.className = `category-tab px-4 py-2 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 ${
+              isActive 
+                ? "bg-brand-600 text-white shadow-md shadow-brand-600/20" 
+                : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+            }`;
+            btn.textContent = cat;
+
+            btn.addEventListener("click", () => {
+              activeCategory = cat;
+              renderCategories(cats);
+              filterAndRenderProducts();
+            });
+
+            container.appendChild(btn);
+          });
+        }
+
+        // Filter and Render Product Grid
+        function filterAndRenderProducts() {
+          const grid = document.getElementById("produk-grid");
+          const emptyState = document.getElementById("empty-state");
+          const countBadge = document.getElementById("product-count-badge");
+          if (!grid || !storeData?.produk) return;
+
+          const allProducts = storeData.produk;
+          const query = searchQuery.trim().toLowerCase();
+
+          const filtered = allProducts.filter((p) => {
+            // Category check
+            const matchesCat = activeCategory === "Semua" || p.kategori === activeCategory;
+            // Search check
+            const matchesSearch = !query || 
+              (p.nama && p.nama.toLowerCase().includes(query)) ||
+              (p.deskripsi_singkat && p.deskripsi_singkat.toLowerCase().includes(query)) ||
+              (p.kategori && p.kategori.toLowerCase().includes(query));
+
+            return matchesCat && matchesSearch;
+          });
+
+          // Update count
+          if (countBadge) {
+            countBadge.textContent = `Menampilkan ${filtered.length} produk`;
+          }
+
+          if (filtered.length === 0) {
+            grid.innerHTML = "";
+            grid.classList.add("hidden");
+            if (emptyState) emptyState.classList.remove("hidden");
+            return;
+          }
+
+          if (emptyState) emptyState.classList.add("hidden");
+          grid.classList.remove("hidden");
+          grid.innerHTML = "";
+
+          const storeName = storeData.toko_info?.nama_toko || "Katalog UMKM";
+          const waNumber = storeData.kontak?.whatsapp_number || "6281234567890";
+
+          filtered.forEach((product) => {
+            const card = document.createElement("div");
+            card.id = `product-card-${product.id}`;
+            card.className = "group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-brand-300 transition-all duration-300 flex flex-col justify-between";
+
+            const isDiscounted = product.harga_diskon && product.harga_diskon < product.harga_asli;
+            const finalPrice = isDiscounted ? product.harga_diskon : product.harga_asli;
+            const waOrderUrl = buildWhatsAppLink(waNumber, product.nama, finalPrice, storeName);
+            const isReady = (product.status_stok || "Ready").toLowerCase() === "ready";
+
+            const stockBadgeClass = isReady
+              ? "bg-emerald-500/90 text-white"
+              : "bg-amber-500/95 text-slate-950 font-bold";
+
+            const stockText = product.status_stok || (isReady ? "Ready" : "PO");
+
+            const imageUrl = product.gambar || product.foto || product.foto_unsplash || "images/placeholder.jpg";
+
+            card.innerHTML = `
+              <div>
+                <!-- Image Wrapper -->
+                <div class="relative aspect-square overflow-hidden bg-slate-100 cursor-pointer" onclick="window.showProductDetail(${product.id})">
+                  <img 
+                    src="${imageUrl}" 
+                    alt="${product.nama}" 
+                    loading="lazy"
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80';"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <!-- Category Pill -->
+                  <span class="absolute top-2.5 left-2.5 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-900/70 backdrop-blur-sm text-white">
+                    ${product.kategori}
+                  </span>
+
+                  <!-- Stock Status Badge -->
+                  <span class="absolute top-2.5 right-2.5 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md shadow-sm ${stockBadgeClass}">
+                    ${stockText}
+                  </span>
+
+                  ${isDiscounted ? `
+                    <span class="absolute bottom-2.5 left-2.5 text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md bg-red-600 text-white shadow-sm">
+                      PROMO
+                    </span>
+                  ` : ''}
+                </div>
+
+                <!-- Product Content -->
+                <div class="p-3 sm:p-4">
+                  <h3 
+                    onclick="window.showProductDetail(${product.id})"
+                    class="font-bold text-slate-900 text-xs sm:text-base leading-snug line-clamp-2 hover:text-brand-600 cursor-pointer transition mb-1"
+                    title="${product.nama}"
+                  >
+                    ${product.nama}
+                  </h3>
+                  
+                  <p class="text-[11px] sm:text-xs text-slate-500 line-clamp-2 mb-3 leading-relaxed">
+                    ${product.deskripsi_singkat || ""}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Price & CTA Action -->
+              <div class="p-3 sm:p-4 pt-0">
+                <div class="mb-3">
+                  <div class="flex items-baseline gap-1.5 flex-wrap">
+                    <span class="text-sm sm:text-lg font-black text-brand-700">
+                      ${formatRupiah(finalPrice)}
+                    </span>
+                    ${isDiscounted ? `
+                      <span class="text-[10px] sm:text-xs text-slate-400 line-through">
+                        ${formatRupiah(product.harga_asli)}
+                      </span>
+                    ` : ''}
+                  </div>
+                </div>
+
+                <!-- Beli via WA Button (Mandatory Dynamic Link) -->
+                <a 
+                  id="wa-btn-${product.id}"
+                  href="${waOrderUrl}" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="w-full flex items-center justify-center gap-1.5 sm:gap-2 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold text-xs sm:text-sm py-2 sm:py-2.5 px-3 rounded-xl shadow-md shadow-amber-500/20 transition duration-150 transform hover:-translate-y-0.5"
+                  title="Pesan ${product.nama} via WhatsApp"
+                >
+                  <i class="fa-brands fa-whatsapp text-sm sm:text-base text-emerald-950"></i>
+                  <span>Beli via WA</span>
+                </a>
+              </div>
+            `;
+
+            grid.appendChild(card);
+          });
+        }
+
+        // Show Product Modal Detail
+        window.showProductDetail = function(productId) {
+          if (!storeData?.produk) return;
+          const product = storeData.produk.find(p => p.id === productId);
+          if (!product) return;
+
+          const modal = document.getElementById("product-modal");
+          const modalImg = document.getElementById("modal-img");
+          const modalTitle = document.getElementById("modal-title");
+          const modalDesc = document.getElementById("modal-desc");
+          const modalDiscount = document.getElementById("modal-discount-price");
+          const modalOriginal = document.getElementById("modal-original-price");
+          const modalSave = document.getElementById("modal-save-badge");
+          const modalStock = document.getElementById("modal-stock-badge");
+          const modalCat = document.getElementById("modal-category-badge");
+          const modalWaBtn = document.getElementById("modal-wa-btn");
+
+          const isDiscounted = product.harga_diskon && product.harga_diskon < product.harga_asli;
+          const finalPrice = isDiscounted ? product.harga_diskon : product.harga_asli;
+
+          const imageUrl = product.gambar || product.foto || product.foto_unsplash || "images/placeholder.jpg";
+          if (modalImg) {
+            modalImg.src = imageUrl;
+            modalImg.onerror = function() {
+              this.onerror = null;
+              this.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80";
+            };
+          }
+          if (modalTitle) modalTitle.textContent = product.nama;
+          if (modalDesc) modalDesc.textContent = product.deskripsi_singkat;
+          if (modalCat) modalCat.textContent = product.kategori;
+
+          if (modalDiscount) modalDiscount.textContent = formatRupiah(finalPrice);
+
+          if (isDiscounted) {
+            if (modalOriginal) {
+              modalOriginal.textContent = formatRupiah(product.harga_asli);
+              modalOriginal.classList.remove("hidden");
+            }
+            if (modalSave) {
+              const diff = product.harga_asli - product.harga_diskon;
+              modalSave.textContent = `Hemat ${formatRupiah(diff)}`;
+              modalSave.classList.remove("hidden");
+            }
+          } else {
+            if (modalOriginal) modalOriginal.classList.add("hidden");
+            if (modalSave) modalSave.classList.add("hidden");
+          }
+
+          const isReady = (product.status_stok || "Ready").toLowerCase() === "ready";
+          if (modalStock) {
+            modalStock.textContent = product.status_stok || (isReady ? "Ready Stock" : "Pre-Order (PO)");
+            modalStock.className = `absolute bottom-3 left-3 text-xs font-extrabold px-3 py-1 rounded-full shadow-md ${
+              isReady ? "bg-emerald-600 text-white" : "bg-amber-500 text-slate-950"
+            }`;
+          }
+
+          const storeName = storeData.toko_info?.nama_toko || "Katalog UMKM";
+          const waNumber = storeData.kontak?.whatsapp_number || "6281234567890";
+          if (modalWaBtn) {
+            modalWaBtn.href = buildWhatsAppLink(waNumber, product.nama, finalPrice, storeName);
+          }
+
+          if (modal) modal.classList.remove("hidden");
+          document.body.classList.add("overflow-hidden");
+        };
+
+        // Close Modal
+        function closeModal() {
+          const modal = document.getElementById("product-modal");
+          if (modal) modal.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        }
+
+        // Render Footer
+        function renderFooter(footer) {
+          if (!footer) return;
+          const copyright = document.getElementById("footer-copyright");
+          const infoRingkas = document.getElementById("footer-info-ringkas");
+
+          if (copyright && footer.hak_cipta) copyright.textContent = footer.hak_cipta;
+          if (infoRingkas && footer.info_ringkas) infoRingkas.textContent = footer.info_ringkas;
+        }
+
+        // Setup Event Listeners
+        function setupListeners() {
+          // Search input
+          const searchInput = document.getElementById("product-search-input");
+          const searchClear = document.getElementById("search-clear-btn");
+          const resetBtn = document.getElementById("reset-filter-btn");
+
+          if (searchInput) {
+            searchInput.addEventListener("input", (e) => {
+              searchQuery = e.target.value;
+              if (searchClear) {
+                if (searchQuery) {
+                  searchClear.classList.remove("hidden");
+                } else {
+                  searchClear.classList.add("hidden");
+                }
+              }
+              filterAndRenderProducts();
+            });
+          }
+
+          if (searchClear && searchInput) {
+            searchClear.addEventListener("click", () => {
+              searchInput.value = "";
+              searchQuery = "";
+              searchClear.classList.add("hidden");
+              filterAndRenderProducts();
+              searchInput.focus();
+            });
+          }
+
+          if (resetBtn && searchInput) {
+            resetBtn.addEventListener("click", () => {
+              searchInput.value = "";
+              searchQuery = "";
+              activeCategory = "Semua";
+              if (searchClear) searchClear.classList.add("hidden");
+              renderCategories(storeData.kategori);
+              filterAndRenderProducts();
+            });
+          }
+
+          // Modal Close
+          const closeBtn = document.getElementById("modal-close-btn");
+          const modal = document.getElementById("product-modal");
+          if (closeBtn) closeBtn.addEventListener("click", closeModal);
+          if (modal) {
+            modal.addEventListener("click", (e) => {
+              if (e.target === modal) closeModal();
+            });
+          }
+          window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeModal();
+          });
+        }
+
+        // Asynchronous YAML Fetching and Parsing using jsyaml
+        async function loadCatalogData() {
+          const loadingState = document.getElementById("loading-state");
+          const contentContainer = document.getElementById("content-container");
+
+          // Try paths: 'data.yaml', './data.yaml', '/data.yaml'
+          const candidatePaths = ["data.yaml", "./data.yaml", "/data.yaml"];
+          let yamlText = null;
+
+          for (const path of candidatePaths) {
+            try {
+              const response = await fetch(path, { cache: "no-store" });
+              if (response.ok) {
+                yamlText = await response.text();
+                break;
+              }
+            } catch (err) {
+              console.warn(`Gagal memuat ${path}:`, err);
+            }
+          }
+
+          try {
+            if (!yamlText) {
+              throw new Error("File data.yaml tidak ditemukan pada server/folder lokal.");
+            }
+
+            // Parse using jsyaml library (official CDN)
+            if (typeof jsyaml === "undefined") {
+              throw new Error("Library js-yaml CDN belum berhasil dimuat.");
+            }
+
+            storeData = jsyaml.load(yamlText);
+
+            if (!storeData) {
+              throw new Error("Format isi data.yaml tidak valid.");
+            }
+
+            // Render all sections dynamically
+            renderTokoInfo(storeData.toko_info, storeData.kontak);
+            renderHero(storeData.hero);
+            renderKeunggulan(storeData.keunggulan);
+            renderCategories(storeData.kategori);
+            filterAndRenderProducts();
+            renderFooter(storeData.footer);
+            setupListeners();
+
+            // Hide loading, show content
+            if (loadingState) loadingState.classList.add("hidden");
+            if (contentContainer) contentContainer.classList.remove("hidden");
+
+          } catch (error) {
+            console.error("Error loading catalog:", error);
+            if (loadingState) {
+              loadingState.innerHTML = `
+                <div class="max-w-md mx-auto p-6 bg-red-50 border border-red-200 rounded-2xl text-left">
+                  <div class="flex items-center gap-3 text-red-600 mb-2 font-bold text-lg">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Gagal Memuat Katalog</span>
+                  </div>
+                  <p class="text-sm text-red-700 mb-4">
+                    ${error.message || "Terjadi kendala saat membaca data.yaml."}
+                  </p>
+                  <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                    <strong>Catatan:</strong> Jika membuka file HTML secara langsung (protokol <code>file:///</code>), browser dapat memblokir pembacaan file eksternal karena kebijakan keamanan CORS. Gunakan local web server (seperti VS Code Live Server, <code>npx serve</code>, atau Vite).
+                  </p>
+                  <button onclick="location.reload()" class="px-4 py-2 bg-brand-600 text-white rounded-lg text-xs font-bold hover:bg-brand-700 transition">
+                    Coba Lagi
+                  </button>
+                </div>
+              `;
+            }
+          }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", loadCatalogData);
+        } else {
+          loadCatalogData();
+        }
+
+      })();
+    </script>
+  </body>
+</html>

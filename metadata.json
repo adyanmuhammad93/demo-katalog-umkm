@@ -1,0 +1,6 @@
+{
+  "name": "Katalog Produk UMKM Modern",
+  "description": "Template website statis katalog produk UMKM modern dengan data terpisah dalam file data.yaml dan integrasi pemesanan otomatis via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

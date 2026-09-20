@@ -1,0 +1,93 @@
+toko_info:
+  nama_toko: "Karya Nusantara UMKM"
+  slogan: "Cita Rasa Otentik & Kerajinan Unggulan Nusantara"
+  deskripsi_toko: "Katalog produk pilihan UMKM Indonesia menghadirkan kuliner khas daerah, kain tenun etnik, dan kerajinan tangan berkualitas ekspor langsung dari para pengrajin lokal."
+  logo_text: "UMKM Nusantara"
+
+kontak:
+  whatsapp_number: "6281234567890"
+  alamat: "Jl. Malioboro No. 45, Danurejan, Kota Yogyakarta, D.I. Yogyakarta 55213"
+  instagram_username: "@umkm.nusantara.official"
+
+kategori:
+  - "Semua"
+  - "Makanan & Camilan"
+  - "Pakaian & Tenun"
+  - "Kerajinan & Aksesoris"
+  - "Kopi & Minuman"
+
+hero:
+  banner_image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80"
+  title: "Dukung Produk Lokal, Rasakan Kualitas Terbaik Indonesia"
+  sub_title: "Jelajahi ragam produk unggulan UMKM terkurasi dari pelosok negeri. Dibuat dengan dedikasi tinggi, bahan alami pilihan, dan harga langsung dari pengrajin."
+  cta_text: "Lihat Koleksi Produk"
+
+produk:
+  - id: 1
+    nama: "Kopi Arabika Gayo Single Origin 250g"
+    kategori: "Kopi & Minuman"
+    foto_unsplash: "https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=800&q=80"
+    harga_asli: 85000
+    harga_diskon: 68000
+    deskripsi_singkat: "Kopi arabika asli dataran tinggi Gayo Aceh proses full wash, aroma floral semerbak dengan sentuhan rasa karamel manis alami."
+    status_stok: "Ready"
+
+  - id: 2
+    nama: "Keripik Tempe Renyah Daun Jeruk 200g"
+    kategori: "Makanan & Camilan"
+    foto_unsplash: "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?auto=format&fit=crop&w=800&q=80"
+    harga_asli: 28000
+    harga_diskon: 22500
+    deskripsi_singkat: "Camilan gurih renyah berbahan kedelai lokal pilihan dipadu rempah asli dan irisan daun jeruk segar tanpa pengawet buatan."
+    status_stok: "Ready"
+
+  - id: 3
+    nama: "Kain Tenun Ikat Tradisional Motif Jepara"
+    kategori: "Pakaian & Tenun"
+    foto_unsplash: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=800&q=80"
+    harga_asli: 250000
+    harga_diskon: 195000
+    deskripsi_singkat: "Kain tenun ATBM (Alat Tenun Bukan Mesin) buatan tangan pengrajin Jepara dengan pewarnaan alami lembut berukuran 240 x 120 cm."
+    status_stok: "Ready"
+
+  - id: 4
+    nama: "Tas Anyaman Pandan Alami Handmade"
+    kategori: "Kerajinan & Aksesoris"
+    foto_unsplash: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80"
+    harga_asli: 120000
+    harga_diskon: 98000
+    deskripsi_singkat: "Tas jinjing etnik minimalis ramah lingkungan berbahan serat daun pandan kering pilihan dengan handel kulit sintetis kuat."
+    status_stok: "PO"
+
+  - id: 5
+    nama: "Sambal Cakalang Asap Khas Manado 150g"
+    kategori: "Makanan & Camilan"
+    foto_unsplash: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+    harga_asli: 45000
+    harga_diskon: 36000
+    deskripsi_singkat: "Sambal lezat dengan suwiran ikan cakalang asap melimpah berpadu cabai rawit pedas segar dan rempah tumis harum menggugah selera."
+    status_stok: "Ready"
+
+  - id: 6
+    nama: "Kemeja Batik Katun Pria Lengan Pendek"
+    kategori: "Pakaian & Tenun"
+    foto_unsplash: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80"
+    harga_asli: 175000
+    harga_diskon: 139000
+    deskripsi_singkat: "Batik cap premium pola kontemporer katun primisima adem, jahitan rapi dengan cutting modern fit cocok untuk kerja maupun hangout."
+    status_stok: "Ready"
+
+keunggulan:
+  - judul: "100% Produk Lokal Asli"
+    deskripsi: "Diproduksi langsung oleh pengrajin & UMKM binaan dengan jaminan keaslian bahan nusantara."
+    ikon: "fa-solid fa-award"
+  - judul: "Pengemasan Aman & Cepat"
+    deskripsi: "Standar packaging kardus & bubble wrap tebal berlapis, pesanan diproses di hari yang sama."
+    ikon: "fa-solid fa-truck-fast"
+  - judul: "Bisa Bayar di Tempat (COD)"
+    deskripsi: "Belanja tenang dan nyaman, lakukan pembayaran langsung ketika kurir mengantarkan paket Anda."
+    ikon: "fa-solid fa-hand-holding-dollar"
+
+footer:
+  hak_cipta: "© 2026 UMKM Nusantara. Seluruh Hak Cipta Dilindungi."
+  info_ringkas: "Gerakan bersama memajukan ekonomi kerakyatan melalui digitalisasi karya kreatif dan kuliner khas nusantara."
